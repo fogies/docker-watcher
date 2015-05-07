@@ -1,5 +1,6 @@
 # docker-jekyll-site
 
+```
 watcherwebdub:
   build: ""https://github.com/fogies/docker-watcher.git""
   volumes:
@@ -8,3 +9,4 @@ watcherwebdub:
   environment:
     GIT_REPOSITORY: "https://github.com/uwdub/web-dub.git"
     CONTAINER: "webdub"
+```
