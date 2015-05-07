@@ -2,7 +2,7 @@
 
 ```
 watcherwebdub:
-  build: ""https://github.com/fogies/docker-watcher.git""
+  build: "https://github.com/fogies/docker-watcher.git"
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
     - "fig:/fig"
