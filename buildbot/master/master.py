@@ -23,19 +23,18 @@ build_config['protocols'] = {
 # CHANGESOURCES
 
 # 'change_source' tells the buildmaster how it should find out about source code changes
-repositories = []
-if 'GIT_REPOSITORY' in os.environ:
-    repositories.append(os.environ['GIT_REPOSITORY'])
+repositories = [environ for environ in os.environ if environ.startswith('GIT_REPOSITORY')]
 
+build_config['change_source'] = []
 for repository_current in repositories:
-    build_config['change_source'] = [
+    build_config['change_source'].append(
         buildbot.plugins.changes.GitPoller(
-            repository_current,
-            # workdir='gitpoller-workdir',
+            os.environ[repository_current],
+            workdir='gitpoller-workdir-{}'.format(repository_current),
             branches=['master'],
             pollinterval=300
         )
-    ]
+    )
 
 # SCHEDULERS
 
@@ -45,7 +44,7 @@ build_config['schedulers'] = [
         name="all",
         change_filter=buildbot.plugins.util.ChangeFilter(),
         # treeStableTimer=None,
-        builderNames=["restart-container"]
+        builderNames=["restart-services"]
     )
 ]
 
@@ -53,26 +52,25 @@ build_config['schedulers'] = [
 
 # 'builders' define how to perform a build: what steps, and which slaves can execute them.
 # note that any particular build will only take place on one slave.
-containers = []
-if 'CONTAINER' in os.environ:
-    containers.append(os.environ['CONTAINER'])
+services = [os.environ[environ] for environ in os.environ if environ.startswith('SERVICE')]
 
 factory = buildbot.plugins.util.BuildFactory()
-for container_current in containers:
+for service_current in services:
     factory.addStep(
         buildbot.plugins.steps.ShellCommand(
-            command=['fig', '-f', '/fig/fig.yml', 'build', container_current]
+            command=['fig', '-f', '/fig/fig.yml', 'build', service_current]
         )
     )
+for service_current in services:
     factory.addStep(
         buildbot.plugins.steps.ShellCommand(
-            command=['fig', '-f', '/fig/fig.yml', 'up', '-d', container_current]
+            command=['fig', '-f', '/fig/fig.yml', 'up', '-d', service_current]
         )
     )
 
 build_config['builders'] = [
     buildbot.plugins.util.BuilderConfig(
-        name="restart-container",
+        name="restart-services",
         slavenames=["worker-slave"],
         factory=factory
     )
