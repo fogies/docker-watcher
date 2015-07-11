@@ -64,7 +64,7 @@ for service_current in services:
 for service_current in services:
     factory.addStep(
         buildbot.plugins.steps.ShellCommand(
-            command=['fig', '-f', '/fig/fig.yml', 'up', '-d', service_current]
+            command=['fig', '-f', '/fig/fig.yml', 'up', '--no-deps', '-d', service_current]
         )
     )
 
