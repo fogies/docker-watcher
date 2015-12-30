@@ -25,7 +25,7 @@ RUN pip2 install -r /tmp/requirements2.txt && \
     rm /tmp/requirements2.txt
 
 # Install Docker and Fig
-RUN curl -sSL https://get.docker.com/ubuntu/ | sh && \
+RUN curl -sSL https://get.docker.com/ | sh && \
     curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m` > /usr/local/bin/fig; chmod +x /usr/local/bin/fig
 
 # Create our buildbot directories
