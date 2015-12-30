@@ -19,14 +19,14 @@ RUN apt-get update && \
     && \
     apt-get clean
 
+# Install Docker and Fig
+RUN curl -sSL https://get.docker.com/ | sh && \
+    curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m` > /usr/local/bin/fig; chmod +x /usr/local/bin/fig
+
 # Install the Python packages we need
 COPY requirements2.txt /tmp/requirements2.txt
 RUN pip2 install -r /tmp/requirements2.txt && \
     rm /tmp/requirements2.txt
-
-# Install Docker and Fig
-RUN curl -sSL https://get.docker.com/ | sh && \
-    curl -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m` > /usr/local/bin/fig; chmod +x /usr/local/bin/fig
 
 # Create our buildbot directories
 RUN mkdir buildbot && \
