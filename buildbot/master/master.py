@@ -27,11 +27,13 @@ repositories = [environ for environ in os.environ if environ.startswith('GIT_REP
 
 build_config['change_source'] = []
 for repository_current in repositories:
+    branch = os.environ.get(repository_current + "_BRANCH", 'master')
+
     build_config['change_source'].append(
         buildbot.plugins.changes.GitPoller(
             os.environ[repository_current],
             workdir='gitpoller-workdir-{}'.format(repository_current),
-            branches=['master'],
+            branches=[branch],
             pollinterval=300
         )
     )
