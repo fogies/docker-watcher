@@ -19,7 +19,7 @@ RUN apt-get update && \
     && \
     apt-get clean
 
-# Install Docker and Fig
+# Install Docker and Docker Compose
 RUN curl -sSL https://get.docker.com/ | sh && \
     curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
