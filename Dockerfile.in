@@ -1,0 +1,53 @@
+{# #############################################################################
+# This file compiles to Dockerfile.
+############################################################################ -#}
+#
+# This file compiled from Dockerfile.in.
+#
+
+{% set current_dockerfile_config = dockerfile.main -%}
+
+FROM {{ current_dockerfile_config.base_image }}
+
+{# #############################################################################
+# Core configuration of the environment. We should always include these.
+############################################################################ -#}
+{% include 'base/dockerfile/environment.Dockerfile' %}
+
+{% include 'base/dockerfile/apt_get_essentials.Dockerfile' %}
+
+{# #############################################################################
+# Different runtimes we may want to include.
+#
+# {% include 'base/dockerfile/python.Dockerfile' %}
+# {% include 'base/dockerfile/ruby.Dockerfile' %}
+# {% include 'base/dockerfile/node.Dockerfile' %}
+############################################################################ -#}
+{% include 'base/dockerfile/python.Dockerfile' %}
+
+################################################################################
+# Additional packages we need.
+################################################################################
+RUN apt-get -qq clean && \
+    apt-get -qq update && \
+    apt-get -qq install -y --no-install-recommends \
+        supervisor \
+    && \
+    apt-get -qq clean
+
+################################################################################
+# Set up our entrypoint script.
+################################################################################
+COPY requirements3.txt requirements3.txt
+RUN dos2unix requirements3.txt
+
+COPY docker_watcher/buildbot/master.cfg /docker_watcher/buildbot/master.cfg
+RUN dos2unix /docker_watcher/buildbot/master.cfg
+
+COPY docker_watcher/docker_watcher_entrypoint.sh /docker_watcher_entrypoint.sh
+RUN dos2unix /docker_watcher_entrypoint.sh && \
+    chmod +x /docker_watcher_entrypoint.sh
+
+# Run the wrapper script
+CMD ["/docker_watcher_entrypoint.sh"]
+{# This comment gives us a newline at the end of the generated file #}
