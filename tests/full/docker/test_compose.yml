@@ -1,6 +1,8 @@
 test_main:
   container_name: test_main
   build: ../../..
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
 
 test_nginx:
   container_name: test_nginx

@@ -36,6 +36,17 @@ RUN apt-get -qq clean && \
     apt-get -qq clean
 
 ################################################################################
+# Docker and Docker Compose needed for restarting other containers.
+#
+# I found it challenging to pin these to specific old versions.
+# That might be easier with smaller version differences.
+################################################################################
+
+RUN curl -sSL https://get.docker.com/ | sh && \
+    curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+
+################################################################################
 # Set up our entrypoint script.
 ################################################################################
 COPY requirements3.txt requirements3.txt
