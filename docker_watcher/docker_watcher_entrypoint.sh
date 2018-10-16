@@ -22,6 +22,8 @@ buildbot-worker create-worker worker localhost:9989 worker worker
 cd ..
 
 # Put our buildbot config in place
+rm -f buildbot/master/buildbot.tac
+ln -s /docker_watcher/buildbot/buildbot.tac buildbot/master/buildbot.tac
 rm -f buildbot/master/master.cfg
 ln -s /docker_watcher/buildbot/master.cfg buildbot/master/master.cfg
 
