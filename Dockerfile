@@ -144,6 +144,9 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.8.0-rc1/docker
 COPY requirements3.txt requirements3.txt
 RUN dos2unix requirements3.txt
 
+COPY docker_watcher/buildbot/buildbot.tac /docker_watcher/buildbot/buildbot.tac
+RUN dos2unix /docker_watcher/buildbot/buildbot.tac
+
 COPY docker_watcher/buildbot/master.cfg /docker_watcher/buildbot/master.cfg
 RUN dos2unix /docker_watcher/buildbot/master.cfg
 

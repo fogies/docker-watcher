@@ -1,9 +1,10 @@
 import os
+import twisted.python.log
 
 from twisted.application import service
 from buildbot.master import BuildMaster
 
-basedir = 'C:\\Users\\jfogarty\\Documents\\devel\\docker-watcher\\masterdefault'
+basedir = '/docker_watcher/buildbot/master'
 rotateLength = 10000000
 maxRotatedFiles = 10
 configfile = 'master.cfg'
@@ -29,3 +30,8 @@ m = BuildMaster(basedir, configfile, umask)
 m.setServiceParent(application)
 m.log_rotation.rotateLength = rotateLength
 m.log_rotation.maxRotatedFiles = maxRotatedFiles
+
+# Add console logging too
+def printLogMessage(msgdict):
+    print(msgdict['message'])
+twisted.python.log.addObserver(printLogMessage)
