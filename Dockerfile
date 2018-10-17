@@ -2,7 +2,7 @@
 # This file compiled from Dockerfile.in.
 #
 
-FROM ubuntu:18.04
+FROM ubuntu:14.04
 
 #
 # Environment configurations to get everything to play well
@@ -120,13 +120,23 @@ RUN apt-get -qq clean && \
 ################################################################################
 # Docker and Docker Compose needed for restarting other containers.
 #
-# I found it challenging to pin these to specific old versions.
-# That might be easier with smaller version differences.
+# Currently hacked to pin to a specific very old version that's on our server.
 ################################################################################
 
-RUN curl -sSL https://get.docker.com/ | sh && \
-    curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+RUN apt-get install -y -q apt-transport-https ca-certificates
+RUN apt-get install -y -q curl ca-certificates
+RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+RUN mkdir -p /etc/apt/sources.list.d
+RUN echo deb [arch=$(dpkg --print-architecture)]
+RUN echo deb [arch=$(dpkg --print-architecture)] https://apt.dockerproject.org/repo ubuntu-trusty main > /etc/apt/sources.list.d/docker.list
+RUN	apt-get update; apt-get install -y -q docker-engine=1.11.2-0~trusty
+
+RUN curl -L https://github.com/docker/compose/releases/download/1.8.0-rc1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
+
+# RUN curl -sSL https://get.docker.com/ | DOWNLOAD_URL=https://apt.dockerproject.org/ VERSION=1.11.2-0~trusty sh && \
+#    curl -L https://github.com/docker/compose/releases/download/1.8.0-rc1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+#    chmod +x /usr/local/bin/docker-compose
 
 ################################################################################
 # Set up our entrypoint script.
