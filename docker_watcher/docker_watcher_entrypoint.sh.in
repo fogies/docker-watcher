@@ -31,7 +31,7 @@ ln -s /docker_watcher/buildbot/master.cfg buildbot/master/master.cfg
 
 # Put our supervisord config in place
 rm -f /etc/supervisor/conf.d/buildbot.conf
-ln -s etc/supervisor/conf.d/buildbot.conf /etc/supervisor/conf.d/buildbot.conf
+ln -s /docker_watcher/etc/supervisor/conf.d/buildbot.conf /etc/supervisor/conf.d/buildbot.conf
 
 # Start the supervisord
 exec /usr/bin/supervisord -n

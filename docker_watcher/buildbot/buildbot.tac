@@ -22,16 +22,14 @@ if basedir == '.':
 application = service.Application('buildmaster')
 from twisted.python.logfile import LogFile
 from twisted.python.log import ILogObserver, FileLogObserver
-logfile = LogFile.fromFullPath(os.path.join(basedir, "twistd.log"), rotateLength=rotateLength,
-                                maxRotatedFiles=maxRotatedFiles)
+logfile = LogFile.fromFullPath(
+    os.path.join(basedir, "twistd.log"),
+    rotateLength=rotateLength,
+    maxRotatedFiles=maxRotatedFiles
+)
 application.setComponent(ILogObserver, FileLogObserver(logfile).emit)
 
 m = BuildMaster(basedir, configfile, umask)
 m.setServiceParent(application)
 m.log_rotation.rotateLength = rotateLength
 m.log_rotation.maxRotatedFiles = maxRotatedFiles
-
-# Add console logging too
-def printLogMessage(msgdict):
-    print(msgdict['message'])
-twisted.python.log.addObserver(printLogMessage)

@@ -68,6 +68,9 @@ RUN dos2unix /docker_watcher/buildbot/buildbot.tac
 COPY docker_watcher/buildbot/master.cfg /docker_watcher/buildbot/master.cfg
 RUN dos2unix /docker_watcher/buildbot/master.cfg
 
+COPY docker_watcher/etc/supervisor/conf.d/buildbot.conf /docker_watcher/etc/supervisor/conf.d/buildbot.conf
+RUN dos2unix /docker_watcher/etc/supervisor/conf.d/buildbot.conf
+
 COPY docker_watcher/docker_watcher_entrypoint.sh /docker_watcher_entrypoint.sh
 RUN dos2unix /docker_watcher_entrypoint.sh && \
     chmod +x /docker_watcher_entrypoint.sh
