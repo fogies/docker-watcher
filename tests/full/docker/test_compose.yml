@@ -3,6 +3,10 @@ test_main:
   build: ../../..
   volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
+  environment:
+    GIT_REPOSITORY_SERVICE: "https://github.com/fogies/docker-jekyll-site.git"
+    GIT_REPOSITORY_SITE: "https://github.com/fogies/web-jayfo.git"
+    SERVICE: "webjayfo"
 
 test_nginx:
   container_name: test_nginx
